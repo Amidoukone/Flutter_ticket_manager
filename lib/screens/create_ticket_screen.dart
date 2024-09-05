@@ -1,6 +1,6 @@
-// lib/screens/create_ticket_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../providers/ticket_provider.dart';
 import '../models/ticket.dart';
 
@@ -12,6 +12,39 @@ class CreateTicketScreen extends StatelessWidget {
     final titleController = TextEditingController();
     final descriptionController = TextEditingController();
     final categoryController = TextEditingController();
+    final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+    void createTicket() async {
+      if (titleController.text.isNotEmpty &&
+          descriptionController.text.isNotEmpty &&
+          categoryController.text.isNotEmpty) {
+        final newTicket = Ticket(
+          ticketId: '', // ID sera généré par Firestore
+          title: titleController.text,
+          description: descriptionController.text,
+          category: categoryController.text,
+          status: 'En attente', // Statut par défaut
+          createdAt: DateTime.now(),
+          responses: [],
+          userId: userId,
+          timestamp: DateTime.now(),
+        );
+
+        try {
+          await Provider.of<TicketProvider>(context, listen: false)
+              .addTicket(newTicket);
+          Navigator.pop(context);
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Erreur lors de la création du ticket : $e')),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Tous les champs sont obligatoires')),
+        );
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -35,26 +68,7 @@ class CreateTicketScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // Création d'une nouvelle instance de Ticket
-                final newTicket = Ticket(
-                  ticketId: '', // Sera généré par Firestore
-                  title: titleController.text,
-                  description: descriptionController.text,
-                  category: categoryController.text,
-                  status: 'en attente', // Statut par défaut
-                  createdAt: DateTime.now(),
-                  responses: [],
-                  userId: '', timestamp: DateTime.now(), // Remplissez par l'ID de l'utilisateur actuel
-                );
-
-                // Appel de la méthode addTicket dans le TicketProvider
-                Provider.of<TicketProvider>(context, listen: false)
-                    .addTicket(newTicket, newTicket.title, newTicket.description, newTicket.category);
-                
-                // Retour à l'écran précédent après la création du ticket
-                Navigator.pop(context);
-              },
+              onPressed: createTicket,
               child: const Text('Créer'),
             ),
           ],

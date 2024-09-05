@@ -1,35 +1,34 @@
-// lib/models/user.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class UserModel {
-  final String userId; // ID unique de l'utilisateur
-  final String name; // Nom de l'utilisateur
-  final String email; // Adresse e-mail de l'utilisateur
-  final String role; // Rôle de l'utilisateur (apprenant, formateur, administrateur)
+class User {
+  final String id;
+  final String email;
+  final String name;
+  final String role;
 
-  UserModel({
-    required this.userId,
-    required this.name,
+  User({
+    required this.id,
     required this.email,
+    required this.name,
     required this.role,
   });
 
-  // Convertit un document Firestore en objet UserModel
-  factory UserModel.fromFirestore(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    return UserModel(
-      userId: doc.id,
-      name: data['name'] ?? '',
+  // Convertir un document Firestore en objet User
+  factory User.fromDocument(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return User(
+      id: doc.id,
       email: data['email'] ?? '',
-      role: data['role'] ?? 'apprenant', // Par défaut, le rôle est "apprenant"
+      name: data['name'] ?? '',
+      role: data['role'] ?? 'apprenant', // Valeur par défaut
     );
   }
 
-  // Convertit un objet UserModel en format Map pour Firestore
+  // Convertir un objet User en Map pour Firestore
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
       'email': email,
+      'name': name,
       'role': role,
     };
   }

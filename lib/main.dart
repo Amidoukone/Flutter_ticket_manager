@@ -1,35 +1,36 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:instant_ticket/models/ticket.dart';
-import 'package:instant_ticket/screens/create_ticket_screen.dart';
-import 'package:instant_ticket/screens/home_screen.dart';
-import 'package:instant_ticket/screens/profile_screen.dart';
-import 'package:instant_ticket/screens/register_screen.dart';
-import 'package:instant_ticket/screens/ticket_detail_screen.dart';
+import 'package:firebase_core/firebase_core.dart'; // Import Firebase
+
 import 'package:provider/provider.dart';
 import 'screens/login_screen.dart';
-import 'providers/auth_provider.dart';
-import 'providers/ticket_provider.dart';
+import 'screens/register_screen.dart';
+import 'screens/home_screen.dart'; // Importez HomeScreen
+import 'screens/create_ticket_screen.dart'; // Importez CreateTicketScreen
+import 'providers/ticket_provider.dart'; // Importez TicketProvider
+import 'providers/user_provider.dart'; // Importez UserProvider si vous avez besoin de gérer les utilisateurs
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Options Firebase pour le Web
-  const firebaseOptions = FirebaseOptions(
-    apiKey: "AIzaSyAzLwBzgLuNxegnu9OVvgmJcVTtJngIbMg",
-    authDomain: "instant-ticket-d7430.firebaseapp.com",
-    projectId: "instant-ticket-d7430",
-    storageBucket: "instant-ticket-d7430.appspot.com",
-    messagingSenderId: "631641016958",
-    appId: "1:631641016958:web:ac286b4de9f7b69f33a62f",
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyAzLwBzgLuNxegnu9OVvgmJcVTtJngIbMg",
+      authDomain: "instant-ticket-d7430.firebaseapp.com",
+      projectId: "instant-ticket-d7430",
+      storageBucket: "instant-ticket-d7430.appspot.com",
+      messagingSenderId: "631641016958",
+      appId: "1:631641016958:web:ac286b4de9f7b69f33a62f",
+    ),
   );
 
-  // Initialiser Firebase avec les options appropriées
-  await Firebase.initializeApp(options: firebaseOptions);
-
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => TicketProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()), // Ajout de UserProvider
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -37,37 +38,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(
-            create: (_) => TicketProvider()
-              ..loadTickets()), // Charger les tickets au démarrage
-      ],
-      child: MaterialApp(
-        title: 'Gestion de Tickets',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: LoginScreen(),
-        routes: {
-          '/login': (context) => LoginScreen(),
-          '/home': (context) => const HomeScreen(),
-          '/create-ticket': (context) => CreateTicketScreen(),
-          '/profile': (context) => const ProfileScreen(),
-          '/ticket-details': (context) => TicketDetailsScreen(
-              ticket: Ticket(
-                  ticketId: '',
-                  userId: '',
-                  title: '',
-                  description: '',
-                  category: '',
-                  status: '',
-                  timestamp: DateTime.now(),
-                  createdAt: DateTime.now())),
-          '/register': (context) => RegisterScreen(),
-        },
+    return MaterialApp(
+      title: 'Gestion de Tickets',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: const LoginScreen(), // Écran de connexion
+      routes: {
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/create-ticket': (context) => const CreateTicketScreen(), // Route pour CreateTicketScreen
+        // Ajouter d'autres routes si nécessaire
+      },
     );
   }
 }

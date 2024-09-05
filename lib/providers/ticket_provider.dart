@@ -1,47 +1,46 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/ticket.dart';
 
-class TicketProvider with ChangeNotifier {
-  List<Ticket> _tickets = [];
+class TicketProvider extends ChangeNotifier {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  List<Ticket> get tickets => _tickets;
-
-  // Méthode pour filtrer les tickets par statut
-  List<Ticket> ticketsByStatus(String status) {
-    return _tickets.where((ticket) => ticket.status.toLowerCase() == status.toLowerCase()).toList();
+  // Utilisation d'un Stream pour écouter les changements en temps réel
+  Stream<List<Ticket>> get ticketsStream {
+    return _firestore.collection('tickets').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) => Ticket.fromDocument(doc)).toList();
+    });
   }
 
-  // Chargement des tickets depuis Firestore
-  Future<void> loadTickets() async {
+  // Méthode pour ajouter un ticket
+  Future<void> addTicket(Ticket ticket) async {
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('tickets').get();
-      _tickets = querySnapshot.docs.map((doc) => Ticket.fromFirestore(doc)).toList();
+      final docRef = await _firestore.collection('tickets').add(ticket.toMap());
+      ticket.ticketId = docRef.id;
       notifyListeners();
     } catch (e) {
-      print('Erreur lors du chargement des tickets: $e');
+      print("Error adding ticket: $e");
+      rethrow;
     }
   }
 
-// Méthode pour ajouter un nouveau ticket
-Future<void> addTicket(Ticket ticket, String title, String description, String category) async {
-  try {
-    DocumentReference docRef = await FirebaseFirestore.instance.collection('tickets').add(ticket.toMap());
-    Ticket newTicket = ticket.copyWith(ticketId: docRef.id);
-    _tickets.add(newTicket);
-    notifyListeners();
-  } catch (e) {
-    print('Erreur lors de l\'ajout du ticket: $e');
+  // Méthode pour mettre à jour un ticket
+  Future<void> updateTicket(Ticket ticket) async {
+    try {
+      await _firestore.collection('tickets').doc(ticket.ticketId).update(ticket.toMap());
+      notifyListeners();
+    } catch (e) {
+      print("Error updating ticket: $e");
+    }
   }
-}
 
-
-  // Ajout de réponse au ticket
-  Future<void> addResponse(String ticketId, String content) async {
-    final ticketIndex = _tickets.indexWhere((ticket) => ticket.ticketId == ticketId);
-    if (ticketIndex == -1) return;
-    // Logique d'ajout de réponse à Firestore
-    // Après ajout de réponse, notifier les changements
-    notifyListeners();
+  // Méthode pour supprimer un ticket
+  Future<void> deleteTicket(String ticketId) async {
+    try {
+      await _firestore.collection('tickets').doc(ticketId).delete();
+      notifyListeners();
+    } catch (e) {
+      print("Error deleting ticket: $e");
+    }
   }
 }

@@ -1,101 +1,59 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Response {
-  final String author;
-  final String content;
-  final DateTime timestamp;
-
-  Response({
-    required this.author,
-    required this.content,
-    required this.timestamp,
-  });
-
-  factory Response.fromMap(Map<String, dynamic> data) {
-    return Response(
-      author: data['author'] ?? '',
-      content: data['content'] ?? '',
-      timestamp: (data['timestamp'] as Timestamp).toDate(),
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'author': author,
-      'content': content,
-      'timestamp': Timestamp.fromDate(timestamp),
-    };
-  }
-}
-
 class Ticket {
-  final String ticketId;
-  final String userId;
-  final String title;
-  final String description;
-  final String category;
-  final String status;
-  final DateTime timestamp;
-  final List<Response> responses; // Ajout du champ responses
+  String ticketId;
+  String title;
+  String description;
+  String category;
+  String status;
+  DateTime createdAt;
+  List<String> responses;
+  String userId;
+  DateTime timestamp;
 
   Ticket({
     required this.ticketId,
-    required this.userId,
     required this.title,
     required this.description,
     required this.category,
     required this.status,
+    required this.createdAt,
+    required this.responses,
+    required this.userId,
     required this.timestamp,
-    this.responses = const [], required DateTime createdAt,
   });
 
-  Ticket copyWith({
-    String? ticketId,
-    String? userId,
-    String? title,
-    String? description,
-    String? category,
-    String? status,
-    DateTime? timestamp,
-    List<Response>? responses,
-  }) {
-    return Ticket(
-      ticketId: ticketId ?? this.ticketId,
-      userId: userId ?? this.userId,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      category: category ?? this.category,
-      status: status ?? this.status,
-      timestamp: timestamp ?? this.timestamp,
-      responses: responses ?? this.responses, createdAt: DateTime.now(),
-    );
-  }
-
-  factory Ticket.fromFirestore(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+  // Convertir un document Firestore en objet Ticket
+  factory Ticket.fromDocument(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>; // Cast des données
     return Ticket(
       ticketId: doc.id,
-      userId: data['userId'] ?? '',
-      title: data['title'] ?? '',
+      title: data['title'] ?? '', // Utilisation d'une valeur par défaut vide
       description: data['description'] ?? '',
       category: data['category'] ?? '',
-      status: data['status'] ?? 'en attente',
-      timestamp: (data['timestamp'] as Timestamp).toDate(),
-      responses: (data['responses'] as List<dynamic>? ?? [])
-          .map((response) => Response.fromMap(response))
-          .toList(), createdAt: DateTime.now(),
+      status: data['status'] ?? 'En attente', // Statut par défaut
+      createdAt: data.containsKey('createdAt') // Vérifie si le champ existe
+          ? (data['createdAt'] as Timestamp).toDate()
+          : DateTime.now(), // Utilise la date actuelle si le champ est manquant
+      responses: List<String>.from(data['responses'] ?? []), // Assure une liste vide si manquant
+      userId: data['userId'] ?? '',
+      timestamp: data.containsKey('timestamp')
+          ? (data['timestamp'] as Timestamp).toDate()
+          : DateTime.now(), // Utilise la date actuelle si le champ est manquant
     );
   }
 
+  // Convertir un objet Ticket en format Firestore
   Map<String, dynamic> toMap() {
     return {
-      'userId': userId,
       'title': title,
       'description': description,
       'category': category,
       'status': status,
-      'timestamp': Timestamp.fromDate(timestamp),
-      'responses': responses.map((response) => response.toMap()).toList(),
+      'createdAt': createdAt,
+      'responses': responses,
+      'userId': userId,
+      'timestamp': timestamp,
     };
   }
 }
