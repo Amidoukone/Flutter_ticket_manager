@@ -49,27 +49,79 @@ class CreateTicketScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Créer un Nouveau Ticket'),
+        backgroundColor: const Color(0xFF128C7E), // Couleur verte plus foncée
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               controller: titleController,
-              decoration: const InputDecoration(labelText: 'Titre'),
+              decoration: InputDecoration(
+                labelText: 'Titre',
+                labelStyle: const TextStyle(color: Color(0xFF1B5E20)), // Couleur verte foncée
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color(0xFF128C7E), width: 2.0), // Bordure verte foncée
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
             ),
+            const SizedBox(height: 16),
             TextField(
               controller: descriptionController,
-              decoration: const InputDecoration(labelText: 'Description'),
+              decoration: InputDecoration(
+                labelText: 'Description',
+                labelStyle: const TextStyle(color: Color(0xFF1B5E20)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color(0xFF128C7E), width: 2.0),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              maxLines: 3, // Permet plus d'espace pour la description
             ),
+            const SizedBox(height: 16),
             TextField(
               controller: categoryController,
-              decoration: const InputDecoration(labelText: 'Catégorie'),
+              decoration: InputDecoration(
+                labelText: 'Catégorie',
+                labelStyle: const TextStyle(color: Color(0xFF1B5E20)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color(0xFF128C7E), width: 2.0),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: createTicket,
-              child: const Text('Créer'),
+            const SizedBox(height: 24),
+            Center(
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF128C7E), // Bouton vert foncé
+                  padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 24.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                icon: const Icon(Icons.check, color: Colors.white), // Icône avec le texte
+                onPressed: createTicket,
+                label: const Text(
+                  'Créer',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
           ],
         ),

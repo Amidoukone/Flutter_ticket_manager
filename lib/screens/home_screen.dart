@@ -17,10 +17,10 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tickets'),
-        backgroundColor: const Color(0xFF25D366),
+        backgroundColor: const Color(0xFF128C7E), // Couleur verte plus foncée
         actions: [
           IconButton(
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.add, color: Colors.white),
             onPressed: () {
               Navigator.push(
                 context,
@@ -56,15 +56,17 @@ class HomeScreen extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 elevation: 5,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(12),
                 ),
+                color: const Color(0xFFF1F8E9), // Couleur de fond douce pour la carte
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(16.0),
                   title: Text(
                     ticket.title,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 18,
+                      color: Color(0xFF1B5E20), // Couleur verte foncée pour le titre
                     ),
                   ),
                   subtitle: Text(
@@ -79,11 +81,11 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             if (ticket.status != 'Résolu') // Permet de modifier seulement si non résolu
                               IconButton(
-                                icon: const Icon(Icons.edit),
+                                icon: const Icon(Icons.edit, color: Color(0xFF1B5E20)), // Icône verte
                                 onPressed: () => _editTicket(context, ticket),
                               ),
-                            IconButton( // Toujours permettre la suppression
-                              icon: const Icon(Icons.delete),
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.redAccent), // Icône rouge pour supprimer
                               onPressed: () => _confirmDelete(context, ticket),
                             ),
                           ],
@@ -117,7 +119,7 @@ class HomeScreen extends StatelessWidget {
                 decoration: InputDecoration(
                   labelText: 'Titre',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
               ),
@@ -127,7 +129,7 @@ class HomeScreen extends StatelessWidget {
                 decoration: InputDecoration(
                   labelText: 'Description',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
               ),
@@ -137,7 +139,7 @@ class HomeScreen extends StatelessWidget {
                 decoration: InputDecoration(
                   labelText: 'Catégorie',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
               ),
@@ -148,7 +150,10 @@ class HomeScreen extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
               child: const Text('Annuler'),
             ),
-            TextButton(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF128C7E), // Bouton vert foncé
+              ),
               onPressed: () {
                 Navigator.of(context).pop({
                   'title': titleController.text,
@@ -191,7 +196,10 @@ class HomeScreen extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
               child: const Text('Annuler'),
             ),
-            TextButton(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent, // Couleur rouge pour le bouton de suppression
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
                 _deleteTicket(context, ticket.ticketId);

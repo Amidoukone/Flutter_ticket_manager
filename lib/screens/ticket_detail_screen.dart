@@ -47,7 +47,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Détails du Ticket'),
-        backgroundColor: const Color(0xFF25D366),
+        backgroundColor: const Color(0xFF128C7E), // Vert foncé
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -123,24 +123,30 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                   ElevatedButton(
                     onPressed: () => changeStatus('En cours'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF25D366),
+                      backgroundColor: const Color(0xFF128C7E), // Vert foncé pour le fond
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
                     ),
-                    child: const Text('Marquer comme En cours'),
+                    child: const Text(
+                      'Marquer comme En cours',
+                      style: TextStyle(color: Colors.white), // Texte blanc
+                    ),
                   ),
                   ElevatedButton(
                     onPressed: () => changeStatus('Résolu'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF25D366),
+                      backgroundColor: const Color(0xFF128C7E), // Vert foncé pour le fond
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
                     ),
-                    child: const Text('Marquer comme Résolu'),
+                    child: const Text(
+                      'Marquer comme Résolu',
+                      style: TextStyle(color: Colors.white), // Texte blanc
+                    ),
                   ),
                 ],
               ),

@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Connexion'),
-        backgroundColor: const Color(0xFF25D366), // Vert WhatsApp
+        backgroundColor: const Color(0xFF128C7E), // Vert foncé
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -59,11 +59,11 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Container(
               padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
-                color: Colors.white, // Fond blanc
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(12.0),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2), // Ombre noire légère
+                    color: Colors.black.withOpacity(0.2), // Ombre pour le conteneur
                     spreadRadius: 3,
                     blurRadius: 6,
                     offset: const Offset(0, 3),
@@ -76,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Text(
                     'Se connecter',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: const Color(0xFF25D366), // Vert WhatsApp
+                      color: const Color(0xFF128C7E), // Vert foncé
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -85,10 +85,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _emailController,
                     decoration: InputDecoration(
                       labelText: 'Email',
+                      labelStyle: const TextStyle(color: Color(0xFF1B5E20)), // Couleur des labels
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      prefixIcon: const Icon(Icons.email, color: Colors.black), // Icône noire
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Color(0xFF128C7E), width: 2.0), // Bordure verte foncé
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      prefixIcon: const Icon(Icons.email, color: Color(0xFF128C7E)), // Icône verte foncé
                     ),
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -97,10 +102,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _passwordController,
                     decoration: InputDecoration(
                       labelText: 'Mot de passe',
+                      labelStyle: const TextStyle(color: Color(0xFF1B5E20)), // Couleur des labels
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      prefixIcon: const Icon(Icons.lock, color: Colors.black), // Icône noire
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Color(0xFF128C7E), width: 2.0), // Bordure verte foncé
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      prefixIcon: const Icon(Icons.lock, color: Color(0xFF128C7E)), // Icône verte foncé
                     ),
                     obscureText: true,
                   ),
@@ -108,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ElevatedButton(
                     onPressed: _login,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF25D366), // Vert WhatsApp
+                      backgroundColor: const Color(0xFF128C7E), // Vert foncé pour le fond
                       padding: const EdgeInsets.symmetric(vertical: 15.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -116,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: const Text(
                       'Se connecter',
-                      style: TextStyle(fontSize: 16, color: Colors.white), // Texte blanc
+                      style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold), // Texte blanc
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -125,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.pushNamed(context, '/register');
                     },
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.black, // Texte noir
+                      foregroundColor: const Color(0xFF128C7E), // Texte vert foncé
                     ),
                     child: const Text('Créer un compte'),
                   ),
@@ -133,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextButton(
                     onPressed: _resetPassword,
                     style: TextButton.styleFrom(
-                      foregroundColor: const Color(0xFF25D366), // Texte vert
+                      foregroundColor: const Color(0xFF128C7E), // Texte vert foncé
                     ),
                     child: const Text('Mot de passe oublié ?'),
                   ),

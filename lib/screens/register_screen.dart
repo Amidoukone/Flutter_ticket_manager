@@ -14,14 +14,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  
+
   String? _selectedRole; // Rôle sélectionné par l'utilisateur
   final List<String> _roles = ['Admin', 'Formateur', 'Apprenant']; // Liste des rôles possibles
 
   void _register() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
-    
+
     if (email.isEmpty || password.isEmpty || _selectedRole == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Veuillez remplir tous les champs.')),
@@ -58,7 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Inscription'),
-        backgroundColor: const Color(0xFF25D366), // Vert WhatsApp
+        backgroundColor: const Color(0xFF128C7E), // Vert foncé
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -84,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Text(
                     'Créer un compte',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: const Color(0xFF25D366), // Vert WhatsApp
+                      color: const Color(0xFF128C7E), // Vert foncé
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -93,10 +93,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: _emailController,
                     decoration: InputDecoration(
                       labelText: 'Email',
+                      labelStyle: const TextStyle(color: Color(0xFF1B5E20)), // Couleur des labels
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      prefixIcon: const Icon(Icons.email, color: Colors.black), // Icône noire
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Color(0xFF128C7E), width: 2.0), // Bordure verte foncé
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      prefixIcon: const Icon(Icons.email, color: Color(0xFF128C7E)), // Icône verte foncé
                     ),
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -105,10 +110,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: _passwordController,
                     decoration: InputDecoration(
                       labelText: 'Mot de passe',
+                      labelStyle: const TextStyle(color: Color(0xFF1B5E20)), // Couleur des labels
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      prefixIcon: const Icon(Icons.lock, color: Colors.black), // Icône noire
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Color(0xFF128C7E), width: 2.0), // Bordure verte foncé
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      prefixIcon: const Icon(Icons.lock, color: Color(0xFF128C7E)), // Icône verte foncé
                     ),
                     obscureText: true,
                   ),
@@ -117,7 +127,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     value: _selectedRole,
                     decoration: InputDecoration(
                       labelText: 'Sélectionnez un rôle',
+                      labelStyle: const TextStyle(color: Color(0xFF1B5E20)), // Couleur des labels
                       border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Color(0xFF128C7E), width: 2.0), // Bordure verte foncé
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
@@ -137,7 +152,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ElevatedButton(
                     onPressed: _register,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF25D366), // Vert WhatsApp
+                      backgroundColor: const Color(0xFF128C7E), // Vert foncé
                       padding: const EdgeInsets.symmetric(vertical: 15.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -145,7 +160,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     child: const Text(
                       'S\'inscrire',
-                      style: TextStyle(fontSize: 16, color: Colors.white), // Texte blanc
+                      style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold), // Texte blanc
                     ),
                   ),
                 ],
